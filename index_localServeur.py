@@ -6,11 +6,11 @@ import requests
 
 app = Flask(__name__)
 
-@app.route('/temperature/<ville>')
-def get_temperature(ville):
+@app.route('/temperature')
+def get_temperature():
   # Récupérer la ville en tant qu'argument de ligne de commande
   #ville = sys.argv[1]
-
+  ville = request.args.get('ville')
   url = f"https://www.bing.com/search?q=météo+{ville}&form=QBLH&sp=-1&ghc=1&lq=0&pq=météo+{ville}&sc=10-14&qs=n&sk=&cvid=A94421AB031B43C3A6CFA2FAE6ECAAFC&ghsh=0&ghacc=0&ghpl="
 
   payload={}
