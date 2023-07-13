@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Formulaire de température</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        form {
+            width: 300px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        input[type="button"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <form>
+        <label for="ville">Ville :</label>
+        <input type="text" id="ville" name="ville" placeholder="Entrez une ville" required>
+        <input id ="send" type="button" value="Obtenir la température">
+    </form>
+
+    <div class="temp">
+        <script>
+            document.getElementById("send").addEventListener('click', event => {
+                var requestOptions = {
+                method: 'GET',
+                redirect: 'follow'
+            };
+
+            fetch("http://172.20.10.6/temperature/"+document.getElementById("ville").value, requestOptions)
+            .then(response => response.text())
+            .then(result => write_temperature(result))
+            .catch(error => console.log('error', error));
+            });
+            function write_temperature(result){
+                var temperatureDiv = document.querySelector('.temp');
+                temperatureDiv.innerText = "La température à " + document.getElementById("ville").value + " est de " + result + " degrés Celsius.";}
+        </script>
+    </div>
+</body>
+</html>

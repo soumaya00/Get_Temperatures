@@ -40,7 +40,13 @@ def get_temperature(ville):
   # Afficher la valeur de la température
   return temperature
 
+@app.route('/ui')
+def get_ui():
+  fichier = open("./index.html", "r")
+  a=fichier.read()
+  fichier.close()
+  return a
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=80)
-
-
