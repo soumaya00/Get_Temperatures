@@ -74,9 +74,10 @@
                 sendButton.addEventListener('click', () => {
                     const ville = villeInput.value;
 
-                    fetch(`/temperature?ville=`+ville)
+                    fetch(`./index.php?ville=`+encodeURI(ville))
                         .then(response => response.text())
                         .then(result => {
+                            console.log(result);
                             temperatureDiv.innerText = `La température à ${ville} est de ${result} degrés Celsius.`;
                         })
                         .catch(error => console.log('error', error));
