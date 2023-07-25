@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title>Formulaire de température</title>
+    <meta charset="UTF-8">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -45,45 +47,78 @@
             border-radius: 5px;
             cursor: pointer;
         }
-        div{
+
+        div {
             margin-top: 20px;
         }
+
         .result {
             text-align: center;
             font-weight: bold;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Formulaire de température</h1>
-
-        <form>
+        <p>Merci de rentrer une ville ou un code INSEE</p>
+        <div> </div>
+        <form onsubmit="return false;">
             <label for="ville">Ville :</label>
             <input type="text" id="ville" name="ville" placeholder="Entrez une ville" required>
+            <div> </div>
+            <label for="insee">Code INSEE :</label>
+            <input type="text" id="code_insee" name="code_insee" placeholder="Entrez un code INSEE" required>
             <div> </div>
             <input id="send" type="button" value="Obtenir la température">
         </form>
 
         <div class="result">
             <script>
-                const sendButton = document.getElementById("send");
-                const villeInput = document.getElementById("ville");
-                const temperatureDiv = document.querySelector('.result');
-
-                sendButton.addEventListener('click', () => {
+                function search() {
                     const ville = villeInput.value;
+                    const insee = inseeInput.value;
 
-                    fetch(`./index.php?ville=`+encodeURI(ville))
+                    fetch(`./index.php?ville=` + encodeURI(ville) + `&code_insee=` + encodeURI(insee))
                         .then(response => response.text())
                         .then(result => {
                             console.log(result);
-                            temperatureDiv.innerText = `La température à ${ville} est de ${result} degrés Celsius.`;
+                            if (result == "Unknown") {
+                                temperatureDiv.innerText = `La ville demandée n'a pas été trouvée`;
+                            }
+                            else if (result == "Error") {
+                                temperatureDiv.innerText = `Merci de rentrer une ville OU un code INSEE`;
+                            }
+                            else if (result == "Blank Error") {
+                                temperatureDiv.innerText = `Les champs sont vides`;
+                            }
+                            else {
+                                if (ville.length == 0) {
+                                    temperatureDiv.innerText = `La température au code INSEE ${insee} est de ${result} degrés Celsius.`;
+                                }
+                                else {
+                                    temperatureDiv.innerText = `La température à ${ville} est de ${result} degrés Celsius.`;
+                                }
+
+                            }
                         })
                         .catch(error => console.log('error', error));
+                }
+                const sendButton = document.getElementById("send");
+                const villeInput = document.getElementById("ville");
+                const inseeInput = document.getElementById("code_insee");
+                const temperatureDiv = document.querySelector('.result');
+
+                sendButton.addEventListener('click', () => { search(); });
+                document.addEventListener("keypress", (event) => {
+                    if (event.key === "Enter") {
+                        search();
+                    }
                 });
             </script>
         </div>
     </div>
 </body>
+
 </html>
